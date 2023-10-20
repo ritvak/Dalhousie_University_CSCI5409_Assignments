@@ -1,0 +1,7 @@
+
+FROM node:slim
+WORKDIR /app
+COPY . .
+EXPOSE 6006
+RUN npm install && npm install csv-parser
+CMD node index.js 

@@ -1,0 +1,7 @@
+
+FROM node:slim
+WORKDIR /app
+COPY . .
+EXPOSE 6000
+RUN npm install
+CMD node index.js

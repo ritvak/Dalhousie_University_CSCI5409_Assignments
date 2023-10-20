@@ -1,0 +1,21 @@
+# version: "3"
+services:
+  app1:
+    image: ritvakatrodiya/assignment1:latest1
+    container_name: container_1
+    ports:
+      - 6000:6000
+    volumes:
+      - .:/app/filedata
+    networks:
+      - assignment1
+  app2:
+    image: ritvakatrodiya/assignment1:latest2
+    container_name: container_2
+    volumes:
+      - .:/app/filedata
+    networks:
+      - assignment1
+networks:
+  assignment1:
+    driver: bridge
