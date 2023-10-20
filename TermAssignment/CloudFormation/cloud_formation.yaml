@@ -1,0 +1,454 @@
+# Version of the cloudformation template
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "My API with Lambda, DynamoDB, SQS, SNS, and EventBridge"
+
+# Define input parameters for the EC2 instance
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - m3.medium
+      - m3.large
+    ConstraintDescription: Must be a valid EC2 instance type.
+
+# Create an SQS queue named 'MySQSQueue' and an SNS topic named 'MySNSTopic'.
+
+Resources:
+  MySQSQueue:
+    Type: AWS::SQS::Queue
+    
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "My SNS Topic"
+      TopicName: CSCI5409_SNS1 
+
+  MySNSTopicEmail:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "My SNS Topic for Email"
+      TopicName: CSCI5409_SNS2
+
+# Create an SQS queue policy named 'MySQSQueuePolicy' to allow the SNS topic 'MySNSTopic' to send messages to the SQS queue 'MySQSQueue'.
+
+  MySQSQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Id: MySQSTopicSubscriptionPolicy
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "sqs:SendMessage"
+            Resource: !GetAtt MySQSQueue.Arn
+            Principal:
+              Service: sns.amazonaws.com
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref MySNSTopic
+      Queues:
+        - !Ref MySQSQueue
+
+# Create two SNS subscriptions.
+# 'MySNSTopicSubscriptionSQS' subscribes the SQS queue 'MySQSQueue' to the SNS topic 'MySNSTopic'.
+# 'MySNSTopicSubscriptionEmail' subscribes an email address 'rt664810@dal.ca' to the SNS topic 'MySNSTopicEmail'.
+
+  MySNSTopicSubscriptionSQS:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref MySNSTopic
+      Protocol: sqs
+      Endpoint: !GetAtt MySQSQueue.Arn
+
+  MySNSTopicSubscriptionEmail:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref MySNSTopicEmail
+      Protocol: email
+      Endpoint: "rt664810@dal.ca"
+ 
+# Create an API Gateway REST API named 'CSCI5409_MyApiGateway'.
+# The API Gateway has a regional endpoint configuration.
+
+  MyRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: CSCI5409_MyApiGateway
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+# Create an AWS Lambda function named 'getDetails'.
+# The function is written in Python 3.10 and has a handler named 'index.handler'.
+# The function's execution role is specified using the ARN of an existing IAM role 'LabRole'.
+
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: getDetails
+      Runtime: python3.10
+      Handler: index.handler
+      Role: arn:aws:iam::818286248176:role/LabRole
+      Timeout: 30
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import uuid
+          import os
+
+          def handler(event, context):
+              # Extract data from the incoming event
+              if 'body' in event:
+                  # Invoked through API Gateway, extract the body
+                  data = json.loads(event['body'])
+              else:
+                  # Direct Lambda invocation, use the event directly
+                  data = event
+
+              first_name = data['firstName']
+              last_name = data['lastName']
+              email = data['email']
+              address = data['address']
+              age = data['age']
+              contact_number = data['contactNumber']
+              event_name = data['selectedEvent']  
+
+              # Generate a unique ID for the registration
+              registration_id = str(uuid.uuid4())
+
+              # Store the data in DynamoDB
+              dynamodb = boto3.resource('dynamodb')
+              table = dynamodb.Table('Registration')
+
+              item = {
+                  'registration_id': registration_id,
+                  'eventName': event_name,
+                  'firstName': first_name,
+                  'lastName': last_name,
+                  'email': email,
+                  'address': address,
+                  'age': age,
+                  'contactNumber': contact_number
+              }
+
+              table.put_item(Item=item)
+
+              # Create SNS client
+              sns_topic_arn = os.environ['SnsTopicArn']
+              sns = boto3.client('sns')
+
+              # Send the registration data to the SNS topic
+              message = json.dumps(item)  # Send the entire item as the message
+              sns.publish(TopicArn=sns_topic_arn, Message=message)
+
+              # Return a response indicating success
+              response = {
+                  'statusCode': 200,
+                  'body': json.dumps('Registration successful!')
+              }
+
+              return response
+
+      Environment:
+        Variables:
+          SnsTopicArn: !Ref MySNSTopic
+
+# Create an Amazon DynamoDB table named 'Registration'.
+# The table has a primary key defined by the attribute 'registration_id' of type 'S' (String).
+
+  RegistrationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Registration
+      AttributeDefinitions:
+        - AttributeName: registration_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: registration_id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+# Create an API Gateway resource named 'MyApiResource' under the specified 'MyRestApi'.
+# The 'PathPart' property defines the path part of the resource's URL, 'cloud-resource'.
+
+  MyApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ParentId: !GetAtt MyRestApi.RootResourceId
+      PathPart: cloud-resource
+
+# Create an API Gateway method named 'MyApiMethod' under the 'MyApiResource'.
+
+  MyApiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ResourceId: !Ref MyApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction.Arn}/invocations"
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              "method.response.header.Access-Control-Allow-Methods": "'POST,OPTIONS'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"  
+      MethodResponses:
+        - StatusCode: "200"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+            "method.response.header.Access-Control-Allow-Methods": "'POST,OPTIONS'"
+            "method.response.header.Access-Control-Allow-Origin": "'*'"
+        - StatusCode: "400"
+
+# Create an API Gateway method named 'MyOptionsMethod' under the 'MyApiResource'.
+
+  MyOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref MyRestApi
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      ResourceId: !Ref MyApiResource
+      Integration:
+        Type: MOCK
+        RequestTemplates:
+          "application/json": '{"statusCode": 200}'
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              "method.response.header.Access-Control-Allow-Methods": "'POST,OPTIONS'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"  
+          - StatusCode: "400"
+      MethodResponses:
+        - StatusCode: "200"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+            "method.response.header.Access-Control-Allow-Methods": "'POST,OPTIONS'"
+            "method.response.header.Access-Control-Allow-Origin": "'*'"
+
+# Create an API Gateway deployment named 'MyDeployment'.
+# It deploys the API configuration to the 'prod' stage of the API.
+
+  MyDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - MyApiMethod
+      - MyOptionsMethod
+    Properties:
+      RestApiId: !Ref MyRestApi
+      StageName: "prod"
+
+# Create a Lambda permission to allow API Gateway to invoke 'MyLambdaFunction'.
+# The permission is set up for the 'POST' method of the 'MyApiResource' under 'MyRestApi'.
+
+  MyLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref MyLambdaFunction
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyRestApi}/*/POST/cloud-resource"
+
+
+# Create an AWS Lambda function named 'CSCI5409_sendDetails'.
+# This function is responsible for getting messages from the SQS queue and sending email notifications.
+# The function is written in Python 3.10 and has a handler named 'index.handler'.
+# The function's execution role is specified using the ARN of an existing IAM role 'LabRole'.
+# The function code is used to handles the event data.
+
+  MySecondLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: CSCI5409_sendDetails
+      Runtime: python3.10
+      Handler: index.handler
+      Role: arn:aws:iam::818286248176:role/LabRole
+      Timeout: 30
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+
+          # This function is used to get the message from the queue
+          def handler(event, context):
+              try:
+                  sqs = boto3.client('sqs')
+
+                  # Get the SQS queue URL from environment variable
+                  QUEUE_URL = os.environ['QueueUrl']
+
+                  # Get the SNS topic ARN for email from environment variable
+                  sns_topic_arn_email = os.environ['SnsTopicArnEmail']
+
+                  registration_message = sqs.receive_message(
+                      QueueUrl=QUEUE_URL,
+                      MaxNumberOfMessages=1,
+                      VisibilityTimeout=5,
+                      WaitTimeSeconds=5
+                  )
+
+                  # Extract the order details from the message and publish it in SNS 
+                  if 'Messages' in registration_message:
+                      sqs_message = registration_message['Messages'][0]
+                      message_body = json.loads(sqs_message['Body'])
+                      message = json.loads(message_body['Message'])
+
+                      firstName = message['firstName']
+                      lastName = message['lastName']
+                      address = message['address']
+                      contactNumber = message['contactNumber']
+                      age = message['age']
+
+                      sns_message = f"Registration Details:\nFirst Name: {firstName}\nLast Name: {lastName}\n Address: {address}\n Contact Number: {contactNumber}\nAge : {age}"
+
+                      # Create SNS client
+                      sns = boto3.client('sns')
+
+                      # Publish the Order details  
+                      sns.publish(
+                          TopicArn=sns_topic_arn_email,
+                          Message=sns_message,
+                          Subject='New Registration Details',
+                      )
+
+                      receipt_handle_car = sqs_message['ReceiptHandle']
+
+                      sqs.delete_message(
+                          QueueUrl=QUEUE_URL,
+                          ReceiptHandle=receipt_handle_car
+                      )
+
+                      print("Successfully processed the message.")
+                  else:
+                      print("No messages in the SQS queue.")
+
+              except Exception as e:
+                  print(f"An error occurred: {str(e)}")
+                  raise  
+
+              return {
+                  'statusCode': 200,
+                  'body': 'Processing complete'
+              }
+
+      Environment:
+        Variables:
+          QueueUrl: !GetAtt MySQSQueue.QueueUrl
+          SnsTopicArnEmail: !Ref MySNSTopicEmail
+
+
+# Create an Amazon EventBridge rule named 'MyEventRule'.
+# The rule schedules the 'MySecondLambdaFunction' Lambda function to run every 1 minute.
+# The rule is in an enabled state and will trigger the Lambda function based on the specified schedule.
+
+  MyEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Schedule Lambda to run every 1 minute"
+      ScheduleExpression: "rate(1 minute)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt MySecondLambdaFunction.Arn
+          Id: "TargetFunctionV1"
+
+# Create a Lambda permission to allow EventBridge to invoke the 'MySecondLambdaFunction'.
+# This permission allows EventBridge to invoke the Lambda function based on the specified rule.
+
+  MyEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt MySecondLambdaFunction.Arn
+      Action: "lambda:InvokeFunction"
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt MyEventRule.Arn
+  
+# Create an Amazon EC2 instance named 'EC2Instance'.
+# The instance type is customizable using the 'InstanceType' parameter.
+# The instance is launched with an Amazon Machine Image specified by its ID.
+# The instance is associated with the security group 'InstanceSecurityGroup' to control inbound traffic.
+# User data is provided to the instance, which installs necessary packages, clones a GitHub repository, and starts the application.
+
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: ami-05548f9cecf47b442
+      KeyName: ritva  
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: CSCI5409_EC2
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y aws-cli
+          sudo yum install -y git
+          git clone https://github.com/ritvak/termass.git /home/ec2-user/termass
+          sudo yum install -y nodejs
+          cd /home/ec2-user/termass/Term_Assignment
+
+          echo "REACT_APP_API_ENDPOINT=https://${MyRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/cloud-resource" > /home/ec2-user/termass/Term_Assignment/.env
+
+          npm install
+          npm install dovenv
+          npm start
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security group for the EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 6000
+          CidrIp: 0.0.0.0/0
+
+# Define the outputs of the CloudFormation stack that will be shown after stack creation.
+
+Outputs:
+
+  SQSQueueUrl:
+    Description: "URL of the created SQS queue"
+    Value: !Ref MySQSQueue
+    Export:
+      Name: "MySQSQueueUrl"
+
+  SNSTopicArn:
+    Description: "ARN of the created SNS topic"
+    Value: !Ref MySNSTopic
+    Export:
+      Name: "MySNSTopicArn"
+  
+  InstanceId:
+    Description: Instance ID of the created EC2 instance
+    Value: !Ref EC2Instance
+  PublicIp:
+    Description: Public IP address of the created EC2 instance
+    Value: !GetAtt EC2Instance.PublicIp
+  
+  ExportedApiEndpoint:
+    Description: "Exported API Gateway endpoint URL"
+    Value: !Sub "https://${MyRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+    Export:
+      Name: "ApiEndpointUrl"
+  
+ 
