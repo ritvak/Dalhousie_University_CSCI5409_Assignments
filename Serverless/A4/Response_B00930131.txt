@@ -1,0 +1,95 @@
+You're feedback on July 20 2023 16:57:12 PM
+Feedback from /start: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'aws_access_key_id': 'ASIAS4W4B4FR63XB27W4', 'aws_secret_access_key': 'kzjFn/bhXBKNBeRgWSRdIIVZTPovQoHyb1N9TRSc', 'aws_session_token_id': 'FwoGZXIvYXdzEDUaDN8IPZfnRQkoTgG+tSLDAUch39mhPPIzCwkOq1TyTbed3vASPd1Wyed7m+iKyE/oOlrKqtn/XU+PAbiyyaH724S87zr3RZ68tPINTZ0NDall++bZhWsV5WoU64baQzN6MTdjCVaSuCrPUqgi+ax1bJ+aucTwpZ9U9K3GCvZU6A6WLRiCVHquxNSJCw7zHAaIe1dJiGcGRchQQAL2YyumWhbbjbOrB7qeNtxfzhHDeGcfNwLBAY/H8A76dQt2RdopVkKG0C/fXsVAyMOxE3AFf+cmRSjej+alBjItlFOP0K4M+LWYB8fvWfFN0JhbtLKe2JvRVmr9MxDM1c2UTaCKxTz22Qf1W14g', 'url_for_step_function': 'https://jiz2ap55z9.execute-api.us-east-1.amazonaws.com/hashing/select', 'arn_for_step_function': 'arn:aws:states:us-east-1:199103734115:stateMachine:MyStateMachine', 'arn_for_lambda_sha256': 'arn:aws:lambda:us-east-1:199103734115:function:sha-256', 'arn_for_lambda_md5': 'arn:aws:lambda:us-east-1:199103734115:function:md5', 'arn_for_lambda_bcrypt': 'arn:aws:lambda:us-east-1:199103734115:function:bcrypt', 'api_gateway_id': 'jiz2ap55z9'}.
+
+
+You're feedback on July 20 2023 16:57:13 PM
+Feedback from /start: 
+
+
+Problem when sending request to your Step Function with action sha256.
+Problem when sending request to your Step Function with action md5.
+Problem when sending request to your Step Function with action bcrypt.
+
+
+You're feedback on July 20 2023 17:01:36 PM
+Feedback from /start: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'aws_access_key_id': 'ASIAS4W4B4FR63XB27W4', 'aws_secret_access_key': 'kzjFn/bhXBKNBeRgWSRdIIVZTPovQoHyb1N9TRSc', 'aws_session_token_id': 'FwoGZXIvYXdzEDUaDN8IPZfnRQkoTgG+tSLDAUch39mhPPIzCwkOq1TyTbed3vASPd1Wyed7m+iKyE/oOlrKqtn/XU+PAbiyyaH724S87zr3RZ68tPINTZ0NDall++bZhWsV5WoU64baQzN6MTdjCVaSuCrPUqgi+ax1bJ+aucTwpZ9U9K3GCvZU6A6WLRiCVHquxNSJCw7zHAaIe1dJiGcGRchQQAL2YyumWhbbjbOrB7qeNtxfzhHDeGcfNwLBAY/H8A76dQt2RdopVkKG0C/fXsVAyMOxE3AFf+cmRSjej+alBjItlFOP0K4M+LWYB8fvWfFN0JhbtLKe2JvRVmr9MxDM1c2UTaCKxTz22Qf1W14g', 'url_for_step_function': 'https://jiz2ap55z9.execute-api.us-east-1.amazonaws.com/hashing/select', 'arn_for_step_function': 'arn:aws:states:us-east-1:199103734115:stateMachine:MyStateMachine', 'arn_for_lambda_sha256': 'arn:aws:lambda:us-east-1:199103734115:function:sha-256', 'arn_for_lambda_md5': 'arn:aws:lambda:us-east-1:199103734115:function:md5', 'arn_for_lambda_bcrypt': 'arn:aws:lambda:us-east-1:199103734115:function:bcrypt', 'api_gateway_id': 'jiz2ap55z9'}.
+
+
+You're feedback on July 20 2023 17:01:37 PM
+Feedback from /start: 
+
+
+Problem when sending request to your Step Function with action sha256.
+Problem when sending request to your Step Function with action md5.
+Problem when sending request to your Step Function with action bcrypt.
+
+
+You're feedback on July 20 2023 17:02:52 PM
+Feedback from /start: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'aws_access_key_id': 'ASIAS4W4B4FR63XB27W4', 'aws_secret_access_key': 'kzjFn/bhXBKNBeRgWSRdIIVZTPovQoHyb1N9TRSc', 'aws_session_token_id': 'FwoGZXIvYXdzEDUaDN8IPZfnRQkoTgG+tSLDAUch39mhPPIzCwkOq1TyTbed3vASPd1Wyed7m+iKyE/oOlrKqtn/XU+PAbiyyaH724S87zr3RZ68tPINTZ0NDall++bZhWsV5WoU64baQzN6MTdjCVaSuCrPUqgi+ax1bJ+aucTwpZ9U9K3GCvZU6A6WLRiCVHquxNSJCw7zHAaIe1dJiGcGRchQQAL2YyumWhbbjbOrB7qeNtxfzhHDeGcfNwLBAY/H8A76dQt2RdopVkKG0C/fXsVAyMOxE3AFf+cmRSjej+alBjItlFOP0K4M+LWYB8fvWfFN0JhbtLKe2JvRVmr9MxDM1c2UTaCKxTz22Qf1W14g', 'url_for_step_function': 'https://jiz2ap55z9.execute-api.us-east-1.amazonaws.com/hashing/hashing/select', 'arn_for_step_function': 'arn:aws:states:us-east-1:199103734115:stateMachine:MyStateMachine', 'arn_for_lambda_sha256': 'arn:aws:lambda:us-east-1:199103734115:function:sha-256', 'arn_for_lambda_md5': 'arn:aws:lambda:us-east-1:199103734115:function:md5', 'arn_for_lambda_bcrypt': 'arn:aws:lambda:us-east-1:199103734115:function:bcrypt', 'api_gateway_id': 'jiz2ap55z9'}.
+
+
+You're feedback on July 20 2023 17:02:54 PM
+Feedback from /start: 
+
+
+Problem when sending request to your Step Function with action sha256.
+Problem when sending request to your Step Function with action md5.
+Problem when sending request to your Step Function with action bcrypt.
+
+
+You're feedback on July 20 2023 17:07:41 PM
+Feedback from /start: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'aws_access_key_id': 'ASIAS4W4B4FR63XB27W4', 'aws_secret_access_key': 'kzjFn/bhXBKNBeRgWSRdIIVZTPovQoHyb1N9TRSc', 'aws_session_token_id': 'FwoGZXIvYXdzEDUaDN8IPZfnRQkoTgG+tSLDAUch39mhPPIzCwkOq1TyTbed3vASPd1Wyed7m+iKyE/oOlrKqtn/XU+PAbiyyaH724S87zr3RZ68tPINTZ0NDall++bZhWsV5WoU64baQzN6MTdjCVaSuCrPUqgi+ax1bJ+aucTwpZ9U9K3GCvZU6A6WLRiCVHquxNSJCw7zHAaIe1dJiGcGRchQQAL2YyumWhbbjbOrB7qeNtxfzhHDeGcfNwLBAY/H8A76dQt2RdopVkKG0C/fXsVAyMOxE3AFf+cmRSjej+alBjItlFOP0K4M+LWYB8fvWfFN0JhbtLKe2JvRVmr9MxDM1c2UTaCKxTz22Qf1W14g', 'url_for_step_function': 'https://jiz2ap55z9.execute-api.us-east-1.amazonaws.com/hashing/select', 'arn_for_step_function': 'arn:aws:states:us-east-1:199103734115:stateMachine:MyStateMachine', 'arn_for_lambda_sha256': 'arn:aws:lambda:us-east-1:199103734115:function:sha-256', 'arn_for_lambda_md5': 'arn:aws:lambda:us-east-1:199103734115:function:md5', 'arn_for_lambda_bcrypt': 'arn:aws:lambda:us-east-1:199103734115:function:bcrypt', 'api_gateway_id': 'jiz2ap55z9'}.
+
+
+You're feedback on July 20 2023 17:07:42 PM
+Feedback from /start: 
+
+
+Problem when sending request to your Step Function with action sha256.
+Problem when sending request to your Step Function with action md5.
+Problem when sending request to your Step Function with action bcrypt.
+
+
+You're feedback on July 20 2023 17:07:49 PM
+Feedback from /start: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'aws_access_key_id': 'ASIAS4W4B4FR63XB27W4', 'aws_secret_access_key': 'kzjFn/bhXBKNBeRgWSRdIIVZTPovQoHyb1N9TRSc', 'aws_session_token_id': 'FwoGZXIvYXdzEDUaDN8IPZfnRQkoTgG+tSLDAUch39mhPPIzCwkOq1TyTbed3vASPd1Wyed7m+iKyE/oOlrKqtn/XU+PAbiyyaH724S87zr3RZ68tPINTZ0NDall++bZhWsV5WoU64baQzN6MTdjCVaSuCrPUqgi+ax1bJ+aucTwpZ9U9K3GCvZU6A6WLRiCVHquxNSJCw7zHAaIe1dJiGcGRchQQAL2YyumWhbbjbOrB7qeNtxfzhHDeGcfNwLBAY/H8A76dQt2RdopVkKG0C/fXsVAyMOxE3AFf+cmRSjej+alBjItlFOP0K4M+LWYB8fvWfFN0JhbtLKe2JvRVmr9MxDM1c2UTaCKxTz22Qf1W14g', 'url_for_step_function': 'https://jiz2ap55z9.execute-api.us-east-1.amazonaws.com/hashing/', 'arn_for_step_function': 'arn:aws:states:us-east-1:199103734115:stateMachine:MyStateMachine', 'arn_for_lambda_sha256': 'arn:aws:lambda:us-east-1:199103734115:function:sha-256', 'arn_for_lambda_md5': 'arn:aws:lambda:us-east-1:199103734115:function:md5', 'arn_for_lambda_bcrypt': 'arn:aws:lambda:us-east-1:199103734115:function:bcrypt', 'api_gateway_id': 'jiz2ap55z9'}.
+
+
+You're feedback on July 20 2023 17:07:51 PM
+Feedback from /start: 
+
+
+Received 200 Status Code after sending request for sha256 action and received response: {'statusCode': 200, 'result': {'executionArn': 'arn:aws:states:us-east-1:199103734115:execution:MyStateMachine:ScriptExecution-sha256-2023-07-20-17-07-49', 'startDate': 1689883669.615}}
+Test 1 to validate SHA256 hashing successfully triggered.
+Received 200 Status Code after sending request for md5 action and received response: {'statusCode': 200, 'result': {'executionArn': 'arn:aws:states:us-east-1:199103734115:execution:MyStateMachine:ScriptExecution-md5-2023-07-20-17-07-50', 'startDate': 1689883670.382}}
+Test 2 to validate MD5 hashing successfully triggered.
+Received 200 Status Code after sending request for bcrypt action and received response: {'statusCode': 200, 'result': {'executionArn': 'arn:aws:states:us-east-1:199103734115:execution:MyStateMachine:ScriptExecution-bcrypt-2023-07-20-17-07-50', 'startDate': 1689883671.107}}
+Test 3 to validate Bcrypt hashing successfully triggered.
+
+
+You're feedback on July 20 2023 17:20:53 PM
+Feedback from /end: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'result': '7eb13ed99f416ee7eb2a3e2f95b6b0342e6d52bd25f5f55c65dad515da931a9c', 'arn': 'arn:aws:lambda:us-east-1:199103734115:function:sha-256', 'action': 'sha256', 'value': 'Sphinx of black quartz, judge my vow'}.
+Test 1 Passed!
+
+
+You're feedback on July 20 2023 17:21:21 PM
+Feedback from /end: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'result': 'c8adb4770a0582f5814f26a5391ca1b4', 'arn': 'arn:aws:lambda:us-east-1:199103734115:function:md5', 'action': 'md5', 'value': 'Sphinx of black quartz, judge my vow'}.
+Test 2 Passed!
+
+
+You're feedback on July 20 2023 17:21:43 PM
+Feedback from /end: 
+You sent me the following JSON (contents of braces): {'banner': 'B00930131', 'result': '$2b$12$1E8rhcdzl8vQmqiy2R3a5epEm22lNMQoq8vcWFHh6n6RIhhxe1pV2', 'arn': 'arn:aws:lambda:us-east-1:199103734115:function:bcrypt', 'action': 'bcrypt', 'value': 'Sphinx of black quartz, judge my vow'}.
+Test 3 Passed!
+
+
+SHA256 validation - Passed!
+MD5 validation - Passed!
+Bcrypt validation - Passed!
+Your score is 100 out of 100.

@@ -1,0 +1,12 @@
+You sent me the following JSON (contents of braces): {{'banner': 'B00930131', 'ip': '100.24.45.149', 'ec2_instance_id': 'i-03c1a008802e81dee', 'rds_instance_id': 'db2-instance-1', 'aws_access_key_id': 'ASIAS4W4B4FR67UTTYOD', 'aws_secret_access_key': 'oxBgjwZjnmxg+AtSo4KG72djv/HPnZzcIu+JjxsO', 'aws_session_token_id': 'FwoGZXIvYXdzEPf//////////wEaDM4WCN52UO3bI+50hyLDASaQm/1fKJ3mjRinFXW5/woyHRFLdfttYmGmVtLYgoO7SaC1+rpdShgkyZMbuLGnxehI7xb81yP4rOHc+oUCdZw6rWVF+jfqNqpj2Z9o1BVbJkuikho/W0h6NCaFOS5UUig5TRmPqtj7RBEhCyMbR2DliO+GW2xuklHeAR6z6JCN9YKFHqpl6MfDSwNaafoRd+WAzsxRUPqE/SEaNo107kxl/IFxwIvN6ZICJGXZa6H4je2zHKPigh9eOeoouR2XjRGWJSihqKClBjItoAszTzQXwNdgGd+/7iJR41q7gqcA9A/7J+uQI0+SSmND8FTaAQLFYy5Qux0O'}}.
+EC2 is only open to HTTP, HTTPS and SSH
+TEST 1: EC2 Protocol Test passed
+The RDS instance db2-instance-1 is in a VPC with a private subnet.
+Test 2: Passed RDS in private subnet test!!
+source property value is a security group sg-0b92055987bc3e034
+Source security Group ID of RDS instance matches the Security Group ID of EC2 instance
+TEST 3: Passed RDS open to EC2 only test!!
+TEST 4: Passed EC2 and RDS in same VPC!
+Test 5: Passed Store Products check
+Test 6: Passed List Products check.
+Your score is 100 out of 100.
